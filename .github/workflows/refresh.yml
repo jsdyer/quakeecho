@@ -1,0 +1,39 @@
+name: Check scientific source edition
+on:
+  schedule:
+    - cron: '39 8 8 * *'
+  workflow_dispatch:
+concurrency:
+  group: refresh-science
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  refresh:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install lxml
+      - run: python scripts/refresh.py
+      - run: node --test tests/*.test.mjs
+      - run: python -m unittest discover -s tests && python scripts/build.py
+      - name: Publish the checked edition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add web/data
+          if ! git diff --cached --quiet; then
+            git -c user.name=github-actions -c user.email=41898282+github-actions[bot]@users.noreply.github.com commit -m 'Refresh scientific source snapshot'
+            git push origin HEAD:main
+          fi
+          gh workflow run pages.yml --ref main

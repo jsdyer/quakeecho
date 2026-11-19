@@ -1,16 +1,37 @@
 {
-  "id": "coolcode-tool-template",
-  "title": "CoolCode Tool Starter",
-  "description": "A browser-only example that trims lines and removes exact duplicates.",
-  "category": "security",
-  "tags": ["text", "lines", "duplicates"],
-  "icon": "scan-search",
-  "url": "/coolcode-tool-template/",
-  "source": "https://github.com/jsdyer/coolcode-tool-template",
+  "id": "quakeecho",
+  "title": "Quake Echo",
+  "description": "Compare agency estimates of the same Sunshine Coast earthquake and explore where people reported feeling it.",
+  "category": "places",
+  "tags": [
+    "BC",
+    "earthquakes",
+    "Sunshine Coast",
+    "USGS"
+  ],
+  "icon": "activity",
+  "url": "/quakeecho/",
+  "source": "https://github.com/jsdyer/quakeecho",
   "hosting": "project",
   "access": "browser",
   "data_info": {
-    "mode": "local",
-    "detail": "The browser reads the text you paste and compares its lines."
+    "mode": "snapshot",
+    "detail": "Earthquakes Canada publishes a reviewed event bulletin. USGS supplies its preferred estimate, dated products and public intensity reports.",
+    "cadence": "Monthly",
+    "probes": [
+      {
+        "label": "Data retrieved",
+        "url": "https://coolcode.ca/quakeecho/data/edition.json",
+        "path": [
+          "retrieved"
+        ],
+        "count_at": {
+          "path": [
+            "count"
+          ],
+          "unit": "reported areas"
+        }
+      }
+    ]
   }
 }

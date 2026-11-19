@@ -1,7 +1,7 @@
-// Keep transformations separate from the DOM so they can be tested directly.
-export function cleanLines(text) {
-  if (typeof text !== 'string') throw new TypeError('Expected text');
-  const lines = text.split(/\r\n|\r|\n/).map(line => line.trim()).filter(Boolean);
-  const unique = [...new Set(lines)];
-  return { text: unique.join('\n'), count: unique.length, removed: lines.length - unique.length };
+export function communities(areas,term,min,sort){
+  const query=term.trim().toLocaleLowerCase('en-CA');
+  const key=sort==='intensity'?'intensity':sort==='distance'?'distance':'reports';
+  const order=sort==='distance'?1:-1;
+  return areas.filter(r=>r.reports>=min && [r.area,r.city,r.district].join(' ').toLocaleLowerCase('en-CA').includes(query))
+    .sort((a,b)=>(a[key]-b[key])*order || a.area.localeCompare(b.area));
 }
